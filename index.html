@@ -23,13 +23,13 @@
     const params = new URLSearchParams(location.search);
     const ip = params.get("ip") || "";
     const password = params.get("pw") || "";
-    const valid = /^[\w.-]+:\d{2,5}$/.test(ip) && /^[\w-]*$/.test(password);
+    const valid = /^[\w.-]+:\d{2,5}$/.test(ip) && /^[^\s"'<>/]*$/.test(password);
     if (!valid) {
       document.getElementById("title").textContent = "Link inválido";
       document.getElementById("hint").textContent = "Faltou o IP da partida.";
       document.getElementById("connect").remove();
     } else {
-      const steamUrl = `steam://connect/${ip}${password ? `/${password}` : ""}`;
+      const steamUrl = `steam://connect/${ip}${password ? `/${encodeURIComponent(password)}` : ""}`;
       document.getElementById("connect").href = steamUrl;
       document.getElementById("command").textContent = password ? `connect ${ip};password ${password}` : `connect ${ip}`;
       location.href = steamUrl;
